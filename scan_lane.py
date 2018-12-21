@@ -59,13 +59,13 @@ sobel_combo_s = np.zeros_like(s_dir_mag)
 sobel_combo_s[((s_abs_x == 1) & (s_abs_y == 1)) | \
                ((s_mag == 1) & (s_dir_mag == 1))] = 1
 
+print(sobel_combo_s)
+print(sobel_combo_l)
+# sobel_combo_l = np.array(sobel_combo_l).astype(np.int)
+sobel_ls_or = cv2.bitwise_or(sobel_combo_l, sobel_combo_s)
 
-sobel_ls_or = np.array(cv2.bitwise_or(sobel_combo_l, sobel_combo_s)).astype(np.int)
+sobel_ls_and = cv2.bitwise_and(sobel_combo_l, sobel_combo_s)
 
-# sobel_ls_and = np.array(cv2.bitwise_and(sobel_combo_l, sobel_combo_s)).astype(np.int)
-
-print(color_mask[0][0])
-print('sobel', sobel_ls_or[0][0])
 cv2.imshow('sobel_ls_or', sobel_ls_or)
 # cv2.imshow('sobel and', sobel_ls_and)
 
@@ -77,12 +77,16 @@ cv2.imshow('sobel_ls_or', sobel_ls_or)
 #
 # print(color_mask.shape, type(color_mask))
 # print(sobel_ls_or.shape, type(sobel_ls_or))
+color_mask = np.array(color_mask).astype(np.float)
+cv2.imshow('color', color_mask)
+sobel_color_mask_or = cv2.bitwise_or(sobel_ls_or, color_mask)
+sobel_color_mask_and = cv2.bitwise_and(sobel_ls_or, color_mask)
 
-# sobel_color_mask_or = cv2.bitwise_or(sobel_ls_or, color_mask)
-# sobel_color_mask_and = cv2.bitwise_and(np.array(sobel_ls_or).astype(np.int), color_mask)
+sobel_color_and_or = cv2.bitwise_or(sobel_ls_and, color_mask)
 
-# cv2.imshow('soble + color OR', sobel_color_mask_or)
-# cv2.imshow('sobel+color AND', sobel_color_mask_and)
+cv2.imshow('soble + color OR', sobel_color_mask_or)
+cv2.imshow('sobel+color AND', sobel_color_mask_and)
+cv2.imshow('sobel and + color OR', sobel_color_and_or)
 #
 # cv2.imshow('sobel ls and', sobel_ls_and)
 # cv2.imshow('sobel ls', sobel_ls_or)
@@ -101,4 +105,9 @@ elif k == ord('s'): # k == s -> save and exit
     # cv2.imwrite('output_images/canny1_1.png', canny_img)
     # cv2.imwrite('output_images/Hough1_1.png', line_image)
     cv2.imwrite('output_images/adapt_threshold1_1.png', th2)
+    cv2.imwrite('output_images/sobel_l1_1.png', sobel_combo_l)
+    cv2.imwrite('output_images/sobel_s1_1.png', sobel_combo_s)
+    cv2.imwrite('output_images/sobel_or1_1.png', sobel_ls_or)
+    cv2.imwrite('output_images/sobel_and1_1.png', sobel_ls_and)
+
     cv2.destroyAllWindows()
