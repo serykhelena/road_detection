@@ -197,13 +197,13 @@ def k_get(lines):
                 k_deg.append(-90)
         else:
             k_temp = round(dy / float(dx), 4)
-            k_tg.append(k_temp)
-            k_rad.append(math.atan2(dy, dx))
-            k_deg.append(math.degrees(math.atan2(dy, dx)))
+            k_tg.append(round(k_temp, 4))
+            k_rad.append(round(math.atan2(dy, dx), 4))
+            k_deg.append(round(math.degrees(math.atan2(dy, dx)), 4))
 
     return k_tg, k_rad, k_deg
 
-
+''' working 
 with open('cal_param_opts.txt', 'rb') as fp:
     opts = pickle.load(fp)
 
@@ -219,8 +219,9 @@ dst_pts = np.array([[0, 0], [undist_img.shape[1], 0], [undist_img.shape[1], undi
 m = cv2.getPerspectiveTransform(src_pts, dst_pts)
 warped = cv2.warpPerspective(undist_img, m, (undist_img.shape[1], undist_img.shape[0]))   # (maxWidth, maxHeight))
 cv2.imshow('warepd', warped)
+'''
 
-# warped = cv2.imread('output_images/warped1_1.png')
+warped = cv2.imread('output_images/warped1_1.png')
 res_img = fix_illumination(warped)
 canny_img = cv2.Canny(res_img, 10, 100)
 
@@ -257,25 +258,13 @@ line_image = draw_lines(
     thickness=5
 )
 
-cv2.imshow('canny', canny_img)
+print('good k', good_k_tg)
+
+# cv2.imshow('canny', canny_img)
 cv2.imshow('lined', line_image)
 
-k = cv2.waitKey(0) & 0xFF
-if k == 27: # k == ESC
-    cv2.destroyAllWindows()
-elif k == ord('s'): # k == s -> save and exit
-    cv2.imwrite('output_images/warped1_1.png', warped)
-    cv2.imwrite('output_images/canny1_1.png', canny_img)
-    cv2.imwrite('output_images/Hough1_1.png', line_image)
-    cv2.destroyAllWindows()
-
-
-
 '''
-
-
-
-useful_lines = []
+useful_lines = good_lines
 k_lines = []
 for line in range(0, len(lines)):
     new_line = lines[line][0]
@@ -296,32 +285,26 @@ for line in range(0, len(lines)):
         useful_lines.append(new_line)
 useful_lines = np.array([useful_lines])
 # print('useful count', len(useful_lines))
+'''
 
 repeated_k_lines = []
 
-useful_img = draw_lines(
-    warped,
-    useful_lines,
-    thickness=5
-)
 
-cv2.imshow('useful', useful_img)
-
-
-unrepeated_k_lines = np.unique(k_lines)
+unrepeated_k_tg = np.unique(good_k_tg)
+print('unrep k_tg', unrepeated_k_tg)
 paral_k = []
-for u in range(0, len(unrepeated_k_lines)):
+for u in range(0, len(unrepeated_k_tg)):
     counter_rep = 0
-    for l in range(0, len(k_lines)):
-        if k_lines[l] == unrepeated_k_lines[u]:
+    for l in range(0, len(good_k_tg)):
+        if good_k_tg[l] == unrepeated_k_tg[u]:
 
             counter_rep += 1
             if counter_rep == 2:
                 paral_k.append(temp)
-                paral_k.append(k_lines[l])
+                paral_k.append(good_k_tg[l])
             if counter_rep > 2:
-                paral_k.append(k_lines[l])
-            temp = k_lines[l]
+                paral_k.append(good_k_tg[l])
+            temp = good_k_tg[l]
 
 unique_paral_k = np.unique(paral_k)
 
@@ -527,8 +510,12 @@ cv2.line(filtered_line_image, (int(right_dx/2), filtered_line_image.shape[0]), (
 
 
 '''
+k = cv2.waitKey(0) & 0xFF
+if k == 27: # k == ESC
+    cv2.destroyAllWindows()
+elif k == ord('s'): # k == s -> save and exit
+    cv2.imwrite('output_images/warped1_1.png', warped)
+    cv2.imwrite('output_images/canny1_1.png', canny_img)
+    cv2.imwrite('output_images/Hough1_1.png', line_image)
+    cv2.destroyAllWindows()
 
-cv2.waitKey(0)
-
-
-cv2.destroyAllWindows()

@@ -113,3 +113,11 @@ def abs_sobel_thresh(img, orient='x', sobel_kernel=3, thresh=(0, 255)):
     binary_output = 0 * img_sobel
     binary_output[(img_sobel >= thresh[0]) & (img_sobel <= thresh[1])] = 1
     return binary_output
+
+def moving_average(a, n=3):
+    # Moving average
+    a = np.array(a).astype(np.int)
+    ret = np.cumsum(a, dtype=float)
+    ret = ret
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
