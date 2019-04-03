@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import math
+
 
 def undistort_image(img, objpts, imgpts):
     """
@@ -11,10 +13,16 @@ def undistort_image(img, objpts, imgpts):
     undist = cv2.undistort(img, mtx, dist, None, mtx)
     return undist
 
-def draw_lines(img, lines, color=[255, 0, 0], thickness=3):
+
+'''
+    Draw lines on image 
+    !   Input image should be 3-channeled image
+'''
+def draw_lines(img, lines, color=[255, 0, 0], thickness=5):
     # If there are no lines to draw, exit.
     if lines is None:
         return
+
     # Make a copy of the original image.
     img = np.copy(img)
     # Create a blank image that matches the original in size.
@@ -121,3 +129,105 @@ def moving_average(a, n=3):
     ret = ret
     ret[n:] = ret[n:] - ret[:-n]
     return ret[n - 1:] / n
+
+
+def region_of_interest(img, vertices):
+    # Define a blank matrix that matches the image height/width.
+    mask = np.zeros_like(img)
+    # Retrieve the number of color channels of the image.
+    channel_count = img.shape[2]
+    # Create a match color with the same color channel counts.
+    match_mask_color = (255,) * channel_count
+
+    # Fill inside the polygon
+    cv2.fillPoly(mask, vertices, match_mask_color)
+
+    # Returning the image only where mask pixels match
+    masked_image = cv2.bitwise_and(img, mask)
+    return masked_image
+
+
+
+'''
+    Find low border of ROI (rectangular shape)
+    
+    Function has 2 options:
+        show_border = 0     crop input image
+        show_border = 1     draw the green line on input image
+'''
+def find_low_border_of_roi(img, roi_window, show_border=0 ):
+    crop_img = img.copy()
+    height = img.shape[0]
+    width = img.shape[1]
+
+    line_not_found = 0  # boolean flag for checking condition of software
+
+    # go through first [0] vertical line of image
+    # search for white pixel
+    for pix in range(height - 1, 0, -1):
+        if img[pix][0][0] >= 254:
+            # ideal condition
+            # check if the last pixel in the line is also white
+            if img[pix][width - 1][0] >= 254:
+                line_not_found = 1
+                if show_border == 0:
+                    crop_img = img[0:pix, 0:width]
+                else:
+                    cv2.line(crop_img, (0, pix), (width, pix), color=(0, 255, 0), thickness=5)
+                break
+            # if ideal condition is not met
+            # check pixels in window-value area above
+            else:
+                for loc_pix in range(pix, pix - roi_window, -1):
+                    # if white pixel is found
+                    # crop/draw border
+                    if img[loc_pix][width - 1][0] >= 254:
+                        line_not_found = 1
+                        if show_border == 0:
+                            crop_img = img[0:loc_pix, 0:width]
+                        else:
+                            cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=5)
+                        break
+    if line_not_found == 0:
+        print("Ops! Border is not found")
+    else:
+        print("Border is found successfully!")
+
+    return crop_img
+
+def k_get(lines):
+    k_tg = []
+    k_rad = []
+    k_deg = []
+    for line in range(0, len(lines)):
+        new_line = lines[line][0]
+        dx = new_line[2] - new_line[0]
+        dy = new_line[3] - new_line[1]
+        if dx == 0:
+            if dy > 0:
+                k_temp = 90  # 90 !!!! LIE, k = tg(), not angle in rad!!!!!!
+                k_tg.append(k_temp)
+                k_rad.append(1.5708)
+                k_deg.append(90)
+            if dy < 0:
+                k_temp = -90
+                k_tg.append(k_temp)
+                k_rad.append(-1.5708)
+                k_deg.append(-90)
+        else:
+            k_temp = round(dy / float(dx), 4)
+            k_tg.append(round(k_temp, 4))
+            k_rad.append(round(math.atan2(dy, dx), 4))
+            k_deg.append(round(math.degrees(math.atan2(dy, dx)), 4))
+
+    return k_tg, k_rad, k_deg
+
+
+def get_k_b_line(line):
+    k = round(float(line[3] - line[1])/(line[2] - line[0]), 4)
+    b = round(line[1] - k * line[0], 4)
+
+    print("K: ", k, "B: ", b)
+
+    return k, b
+

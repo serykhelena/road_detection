@@ -2,7 +2,7 @@ from __future__ import print_function
 import numpy as np
 import cv2
 import glob
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import math
 import pickle
 
@@ -519,3 +519,4 @@ elif k == ord('s'): # k == s -> save and exit
     cv2.imwrite('output_images/Hough1_1.png', line_image)
     cv2.destroyAllWindows()
 
+'''
