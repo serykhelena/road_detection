@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 
 
-inp_img = cv2.imread('input_imgs/frame000000.png')
-inp_mask = cv2.imread('input_masks/frame000000_mask.pgm')
+inp_img = cv2.imread('input_imgs/frame000681.png')
+inp_mask = cv2.imread('input_masks/frame000681_mask.pgm')
 inp_mask_new_size = cv2.resize(inp_mask, (640, 480), interpolation=cv2.INTER_CUBIC)
 
 height = inp_mask_new_size.shape[0]
@@ -19,7 +19,8 @@ print("This image is: ", type(inp_mask_new_size),
       "Height is: ", height,
       "Width is: ", width)
 
-crop_img = unicorn.find_low_border_of_roi(inp_mask_new_size, roi_window=10, x_limit=60)
+crop_img = unicorn.find_low_border_of_roi(inp_mask_new_size, roi_window=10, x_limit=60, show_border=0)
+crop_img_lined = unicorn.find_low_border_of_roi(inp_mask_new_size, roi_window=10, x_limit=60, show_border=1)
 
 gray_img = cv2.cvtColor(crop_img, cv2.COLOR_RGB2GRAY)
 canny_img = cv2.Canny(gray_img, 100, 200)
@@ -225,7 +226,7 @@ three_line_img = unicorn.draw_lines(
         [max_center_x, max_center_y, min_center_x, min_center_y],
         [right_x_start, max_y_right, right_x_end, min_y_right]
     ]],
-    color=[0, 0, 255],
+    color=[255, 0, 0],
     thickness=5
 )
 
@@ -269,7 +270,7 @@ dif_right_b = round(abs(ref_right_b - right_b), 2)
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 cv2.putText(combine_line, str(dif_left_k), (20, 50), font, 1, (255, 0, 0), thickness=2)
-cv2.putText(combine_line, str(dif_center_k), (250, 50), font, 1, (255, 0, 0), thickness=2)
+cv2.putText(combine_line, str(dif_center_k), (320, 50), font, 1, (255, 0, 0), thickness=2)
 cv2.putText(combine_line, str(dif_right_k), (520, 50), font, 1, (255, 0, 0), thickness=2)
 
 print("D_k left", dif_left_k, "D_b left", dif_left_b)
@@ -293,5 +294,11 @@ plt.imshow(combine_line)
 plt.show()
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-# cv2.imwrite('first_method_output/res000000.png', three_line_img)
+
+cv2.imwrite('roi_imgs/roi000681.png', crop_img)
+
+cv2.imwrite('roi_imgs/roi000681_lined.png', crop_img_lined)
+cv2.imwrite('first_method_output/compare000681.png', combine_line)
+
+
 # cv2.imwrite('sort_lines/slope000000.png', k_center_draw)
