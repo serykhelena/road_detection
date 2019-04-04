@@ -155,7 +155,7 @@ def region_of_interest(img, vertices):
         show_border = 0     crop input image
         show_border = 1     draw the green line on input image
 '''
-def find_low_border_of_roi(img, roi_window, show_border=0 ):
+def find_low_border_of_roi(img, roi_window, x_limit, show_border=0 ):
     crop_img = img.copy()
     height = img.shape[0]
     width = img.shape[1]
@@ -164,30 +164,26 @@ def find_low_border_of_roi(img, roi_window, show_border=0 ):
 
     # go through first [0] vertical line of image
     # search for white pixel
-    for pix in range(height - 1, 0, -1):
-        if img[pix][0][0] >= 254:
-            # ideal condition
-            # check if the last pixel in the line is also white
-            if img[pix][width - 1][0] >= 254:
-                line_not_found = 1
-                if show_border == 0:
-                    crop_img = img[0:pix, 0:width]
-                else:
-                    cv2.line(crop_img, (0, pix), (width, pix), color=(0, 255, 0), thickness=5)
-                break
-            # if ideal condition is not met
-            # check pixels in window-value area above
-            else:
-                for loc_pix in range(pix, pix - roi_window, -1):
-                    # if white pixel is found
-                    # crop/draw border
-                    if img[loc_pix][width - 1][0] >= 254:
-                        line_not_found = 1
-                        if show_border == 0:
-                            crop_img = img[0:loc_pix, 0:width]
-                        else:
-                            cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=5)
+    for x in range(0, x_limit):
+        for pix in range(height - 1, 0, -1):
+            # check the left border pixel
+            if img[pix][x][0] >= 254:
+                for loc_x in range(width-1, width/2, -1):
+                    for loc_pix in range(pix, pix - roi_window, -1):
+                        # if white pixel is found
+                        # crop/draw border
+                        if img[loc_pix][loc_x][0] >= 254:
+                            line_not_found = 1
+                            if show_border == 0:
+                                crop_img = img[0:loc_pix, 0:width]
+                            else:
+                                cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=2)
+                            break
+
+                    if line_not_found == 1:
                         break
+        if line_not_found == 1:
+            break
     if line_not_found == 0:
         print("Ops! Border is not found")
     else:
@@ -227,7 +223,46 @@ def get_k_b_line(line):
     k = round(float(line[3] - line[1])/(line[2] - line[0]), 4)
     b = round(line[1] - k * line[0], 4)
 
-    print("K: ", k, "B: ", b)
-
+    # print(line[0], line[1], line[2], line[3], "k", k, "b", b)
     return k, b
 
+btn_down = False
+
+def get_points(img):
+    # Create dictionary for my_mouse func
+    data = {}
+    data['img'] = img.copy()
+    data['lines'] = []
+    # Set the callback function for any mouse event
+    cv2.imshow('test', img)
+    cv2.setMouseCallback('test', my_mouse_left_click, data)
+    cv2.waitKey(0)
+    # Convert array to np.array in shape n,2,2
+    points = np.uint16(data['lines'])
+    return points, data['img']
+
+
+def my_mouse_left_click(event, x, y, flags, data):
+    global btn_down
+
+    if event == cv2.EVENT_LBUTTONDOWN and btn_down:
+        btn_down = False
+        # add second point
+        data['lines'][0].append((x, y))
+
+        cv2.circle(data['img'], (x, y), 5, (255, 0, 255), thickness=-1)
+        cv2.line(data['img'], data['lines'][0][0], data['lines'][0][1], (255, 0, 255), thickness=3)
+
+        cv2.imshow('test', data['img'])
+
+    elif event == cv2.EVENT_MOUSEMOVE and btn_down:
+        # thi is just for a ine visualization
+        image = data['img'].copy()
+        cv2.line(image, data['lines'][0][0], (x, y), (255, 0, 255), 3)
+        cv2.imshow("test", image)
+
+    elif event == cv2.EVENT_LBUTTONDOWN and len(data['lines']) < 3:
+        btn_down = True
+        data['lines'].insert(0, [(x, y)])  # prepend the point
+        cv2.circle(data['img'], (x, y), 5, (255, 0, 255), thickness=-1) # first point
+        cv2.imshow("test", data['img'])

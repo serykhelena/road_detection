@@ -2,45 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d101c71-a731-4ed2-8252-3323ee01e007" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/road_detection.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/road_detection.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/angle_filtering.py" beforeDir="false" afterPath="$PROJECT_DIR$/angle_filtering.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frame1_9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_frame1_x/new_frame1_9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output_images/Hough1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output_images/adapt_threshold1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output_images/canny1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output_images/color_mask1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output_images/warped1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_8.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_frame1_x/frame1_9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics_one_lane_x/frame1_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/compare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mh_test.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/unicorn.py" beforeDir="false" afterPath="$PROJECT_DIR$/unicorn.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,22 +19,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/unicorn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="225" column="21" selection-start-line="225" selection-start-column="17" selection-end-line="225" selection-end-column="21" />
+            <state relative-caret-position="291">
+              <caret line="226" column="4" lean-forward="true" selection-start-line="226" selection-start-column="4" selection-end-line="226" selection-end-column="4" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/angle_filtering.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-600">
-              <caret line="203" column="29" lean-forward="true" selection-start-line="178" selection-end-line="203" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#37#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -78,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/compare.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
+            <state relative-caret-position="246">
+              <caret line="283" column="24" lean-forward="true" selection-start-line="283" selection-start-column="24" selection-end-line="283" selection-end-column="24" />
               <folding>
                 <element signature="e#19#29#0" expanded="true" />
               </folding>
@@ -88,32 +41,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mh_test.py">
+        <entry file="file://$PROJECT_DIR$/mouse_click.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="196" selection-start-line="194" selection-end-line="196" />
+            <state relative-caret-position="810">
+              <caret line="55" column="23" selection-start-line="54" selection-end-line="55" selection-end-column="23" />
               <folding>
-                <element signature="e#269#279#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scan_lane.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/affine_trf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2859">
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#19#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,6 +74,7 @@
       <list>
         <option value="$PROJECT_DIR$/scan_lane.py" />
         <option value="$PROJECT_DIR$/angle_filtering.py" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/unicorn.py" />
         <option value="$PROJECT_DIR$/compare.py" />
       </list>
@@ -296,9 +230,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.compare" />
+        <item itemvalue="Python.unicorn" />
         <item itemvalue="Python.angle_filtering" />
         <item itemvalue="Python.scan_lane" />
-        <item itemvalue="Python.unicorn" />
       </list>
     </recent_temporary>
   </component>
@@ -365,16 +299,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mh_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="196" selection-start-line="194" selection-end-line="196" />
-          <folding>
-            <element signature="e#269#279#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scan_lane.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -393,18 +317,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/angle_filtering.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-600">
-          <caret line="203" column="29" lean-forward="true" selection-start-line="178" selection-end-line="203" selection-end-column="29" />
+        <state relative-caret-position="-420">
+          <caret line="203" column="29" selection-start-line="178" selection-end-line="203" selection-end-column="29" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mh_test.py" />
+    <entry file="file://$PROJECT_DIR$/input_masks/frame000007_mask.pgm">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="90">
+            <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mouse_click.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="55" column="23" selection-start-line="54" selection-end-line="55" selection-end-column="23" />
+          <folding>
+            <element signature="e#19#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/unicorn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="225" column="21" selection-start-line="225" selection-start-column="17" selection-end-line="225" selection-end-column="21" />
+        <state relative-caret-position="291">
+          <caret line="226" column="4" lean-forward="true" selection-start-line="226" selection-start-column="4" selection-end-line="226" selection-end-column="4" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -413,8 +361,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/compare.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
+        <state relative-caret-position="246">
+          <caret line="283" column="24" lean-forward="true" selection-start-line="283" selection-start-column="24" selection-end-line="283" selection-end-column="24" />
           <folding>
             <element signature="e#19#29#0" expanded="true" />
           </folding>
