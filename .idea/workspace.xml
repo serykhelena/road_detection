@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2d101c71-a731-4ed2-8252-3323ee01e007" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unicorn.py" beforeDir="false" afterPath="$PROJECT_DIR$/unicorn.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +17,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/unicorn.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="171">
-                  <caret line="469" column="4" selection-start-line="469" selection-start-column="4" selection-end-line="469" selection-end-column="50" />
+                <state relative-caret-position="3381">
+                  <caret line="480" column="4" selection-start-line="480" selection-start-column="4" selection-end-line="480" selection-end-column="4" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -30,8 +29,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/compare.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="4291">
-                  <caret line="300" column="46" selection-start-line="300" selection-start-column="46" selection-end-line="300" selection-end-column="46" />
+                <state relative-caret-position="4425">
+                  <caret line="298" selection-start-line="298" selection-end-line="298" />
                   <folding>
                     <element signature="e#19#29#0" expanded="true" />
                   </folding>
@@ -54,12 +53,12 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/method_2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="135">
-                  <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+                <state relative-caret-position="284">
+                  <caret line="82" lean-forward="true" selection-start-line="82" selection-end-line="82" />
                 </state>
               </provider>
             </entry>
@@ -107,22 +106,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="hist_imgs" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,6 +122,17 @@
               <item name="road_detection" type="b2602c69:ProjectViewProjectNode" />
               <item name="road_detection" type="462c0819:PsiDirectoryNode" />
               <item name="pics_one_lane_x" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
             </path>
           </expand>
           <select />
@@ -434,8 +428,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/compare.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4291">
-          <caret line="300" column="46" selection-start-line="300" selection-start-column="46" selection-end-line="300" selection-end-column="46" />
+        <state relative-caret-position="4425">
+          <caret line="298" selection-start-line="298" selection-end-line="298" />
           <folding>
             <element signature="e#19#29#0" expanded="true" />
           </folding>
@@ -447,8 +441,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/unicorn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="469" column="4" selection-start-line="469" selection-start-column="4" selection-end-line="469" selection-end-column="50" />
+        <state relative-caret-position="3381">
+          <caret line="480" column="4" selection-start-line="480" selection-start-column="4" selection-end-line="480" selection-end-column="4" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -457,8 +451,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/method_2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+        <state relative-caret-position="284">
+          <caret line="82" lean-forward="true" selection-start-line="82" selection-end-line="82" />
         </state>
       </provider>
     </entry>
