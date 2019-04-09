@@ -67,39 +67,35 @@ dh = warp_height / w_num
 
 warp1 = warped_img[0:dh, :]
 mean_1, indx_1 = unicorn.get_mean_intensity(warp1)
-unicorn.process_part_of_img(warp1, 5, 20)
-# mean_1, ind_1 = unicorn.get_mean_intensity(warp1)
-# bound_1 = unicorn.get_boundaries_for_intensity(mean_1, 5)
-# extr_1 = unicorn.count_number_of_extrema(mean_1)
-# f_pick_1, s_pick_1, t_pick_1, f_x_1, s_x_1, t_x_1 = unicorn.get_picks_arrays(extr_1, mean_1, bound_1, ind_1)
-# f_pick_coo_1, s_pick_coo_1, t_pick_coo_1 = unicorn.get_picks_coordinates(warp1, f_pick_1, f_x_1, s_pick_1, s_x_1, t_pick_1, t_x_1)
-#
-# print("Left 1", f_pick_coo_1)
-# unicorn.draw_pick_pnts(warp1, f_pick_coo_1, s_pick_coo_1, t_pick_coo_1)
-# unicorn.draw_pick_mask(warp1, 20, f_pick_coo_1)
-# unicorn.draw_pick_mask(warp1, 20, s_pick_coo_1)
-# unicorn.draw_pick_mask(warp1, 20, t_pick_coo_1)
-
-
+unicorn.draw_magic(warp1, 5, 20)
 
 warp2 = warped_img[dh:2*dh, :]
 mean_2, ind_2 = unicorn.get_mean_intensity(warp2)
+unicorn.draw_magic(warp2, 5, 20)
+
+
 warp3 = warped_img[2*dh:3*dh, :]
 mean_3, ind_3 = unicorn.get_mean_intensity(warp3)
+unicorn.draw_magic(warp3, 5, 20)
+
+
 warp4 = warped_img[3*dh:4*dh, :]
 mean_4, ind_4 = unicorn.get_mean_intensity(warp4)
+unicorn.draw_magic(warp4, 5, 20)
+
 warp5 = warped_img[4*dh:5*dh, :]
 mean_5, ind_5 = unicorn.get_mean_intensity(warp5)
+unicorn.draw_magic(warp5, 5, 20)
 
 
 fig = plt.figure(figsize=(8, 8))
 
-plt.subplot(3,1,1)
-plt.imshow(gray_img,cmap='gray')
-plt.axis('off')
-plt.subplot(3,1,2)
+# plt.subplot(3,1,1)
+# plt.imshow(gray_img,cmap='gray')
+# plt.axis('off')
+plt.subplot(2,1,1)
 plt.imshow(warped_img)
-plt.subplot(3,1,3)
+plt.subplot(2,1,2)
 plt.plot(boundaries)
 plt.plot(mean_lines)
 # plt.plot(first_peak)

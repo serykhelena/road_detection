@@ -466,7 +466,12 @@ def draw_pick_mask(img, line_width, pick_pnt, color=[255, 100, 100]):
     else:
         print("No pick to draw mask")
 
-def process_part_of_img(part_img, bound_threshold, line_width):
+
+# def get_mask_img():
+
+
+# def process_part_of_img(part_img, bound_threshold, line_width):
+def draw_magic(part_img, bound_threshold, line_width):
     mean, mean_indx = get_mean_intensity(part_img)
     bound = get_boundaries_for_intensity(mean, bound_threshold)
     extrema = count_number_of_extrema(mean)
