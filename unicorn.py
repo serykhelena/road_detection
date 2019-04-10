@@ -307,10 +307,12 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
 
     return lb_pnt, rb_pnt, lt_pnt, rt_pnt
 
+# fix deathzone -> arg
 def count_number_of_extrema(arr):
     extrema_count = 0
+    deathzone = 0.02
     for m in range(1, len(arr) - 1):
-        if arr[m] > arr[m - 1] and arr[m] > arr[m + 1]:
+        if arr[m] > arr[m - 1] and (arr[m] - arr[m - 1]) > deathzone and arr[m] > arr[m + 1] and (arr[m] - arr[m + 1]) > deathzone:
             extrema_count += 1
         if arr[m] < arr[m - 1] and arr[m] < arr[m + 1]:
             extrema_count += 1
@@ -384,23 +386,70 @@ def get_only_pick_pnts(boundaries, mean_arr, start_val, mean_indx):
 
     return pick_pnts, end_of_peak, pick_indexes
 
+# fix global extrema, calculate from whole picture
+def get_picks_arrays(extrema_num, mean_arr, boundary_arr, indexes, img, global_extrema=3):
+    # global_extrema = count_number_of_extrema
+    width = img.shape[1]
+    left_pick = []
+    center_pick = []
+    right_pick = []
 
-def get_picks_arrays(extrema_num, mean_arr, boundary_arr, indexes):
+    left_x = []
+    center_x = []
+    right_x = []
     if extrema_num == 1:
-        left_pick, end_of_left_pick, left_x = get_only_pick_pnts(boundary_arr, mean_arr, 0, indexes)
+        if global_extrema == 3:
+            temp_pick, temp_end, temp_x = get_only_pick_pnts(boundary_arr, mean_arr, 0, indexes)
+            if max(temp_x) < width/3:
+                left_pick = temp_pick
+                end_of_left_pick = temp_end
+                left_x = temp_x
+            elif max(temp_x) > (width - 2 * width/3) and max(temp_x) < (width - width/3):
+                center_pick = temp_pick
+                end_of_center_pick = temp_end
+                center_x = temp_x
+            elif max(temp_x) > (width - width/3):
+                right_pick = temp_pick
+                end_of_right_pick = temp_end
+                right_x = temp_x
+
+        # left_pick, end_of_left_pick, left_x = get_only_pick_pnts(boundary_arr, mean_arr, 0, indexes)
         print("One pick detected!")
-        center_pick = []
-        center_x = []
-        right_pick = []
-        right_x = []
 
     elif extrema_num == 2:
+        if global_extrema == 3:
+            temp_pick, temp_end, temp_x = get_only_pick_pnts(boundary_arr, mean_arr, 0, indexes)
+            # print("max x", temp_x, width/3, width - 2 * width/3, width - width/3)
+            if max(temp_x) < width/3:
+                left_pick = temp_pick
+                end_of_left_pick = temp_end
+                left_x = temp_x
+            elif max(temp_x) > (width - 2 * width/3) and max(temp_x) < (width - width/3):
+                center_pick = temp_pick
+                end_of_center_pick = temp_end
+                center_x = temp_x
+            elif max(temp_x) > (width - width/3):
+                right_pick = temp_pick
+                end_of_right_pick = temp_end
+                right_x = temp_x
 
-        left_pick, end_of_left_pick, left_x = get_only_pick_pnts(boundary_arr, mean_arr, 0, indexes)
-        center_pick, end_of_center_pick, center_x = get_only_pick_pnts(boundary_arr, mean_arr, end_of_left_pick, indexes)
+            temp_pick, temp_end, temp_x = get_only_pick_pnts(boundary_arr, mean_arr, temp_end, indexes)
+            if max(temp_x) < width/3:
+                left_pick = temp_pick
+                end_of_left_pick = temp_end
+                left_x = temp_x
+            elif max(temp_x) > (width - 2 * width/3) and max(temp_x) < (width - width/3):
+                center_pick = temp_pick
+                end_of_center_pick = temp_end
+                center_x = temp_x
+            elif max(temp_x) > (width - width/3):
+                right_pick = temp_pick
+                end_of_right_pick = temp_end
+                right_x = temp_x
+
+        # left_pick, end_of_left_pick, left_x = get_only_pick_pnts(boundary_arr, mean_arr, 0, indexes)
+        # center_pick, end_of_center_pick, center_x = get_only_pick_pnts(boundary_arr, mean_arr, end_of_left_pick, indexes)
         print("Two picks detected!")
-        right_pick = []
-        right_x = []
 
     elif extrema_num == 3:
 
@@ -466,21 +515,94 @@ def draw_pick_mask(img, line_width, pick_pnt, color=[255, 100, 100]):
     else:
         print("No pick to draw mask")
 
-
-# def get_mask_img():
-
-
 # def process_part_of_img(part_img, bound_threshold, line_width):
 def draw_magic(part_img, bound_threshold, line_width):
     mean, mean_indx = get_mean_intensity(part_img)
     bound = get_boundaries_for_intensity(mean, bound_threshold)
     extrema = count_number_of_extrema(mean)
-    left_pick, center_pick, right_pick, left_x, center_x, right_x = get_picks_arrays(extrema, mean, bound, mean_indx)
+    left_pick, center_pick, right_pick, left_x, center_x, right_x = get_picks_arrays(extrema, mean, bound, mean_indx, part_img)
     left_pick_coo, center_pick_coo, right_pick_coo = get_picks_coordinates(part_img, left_pick, left_x, center_pick, center_x, right_pick, right_x)
 
     draw_pick_mask(part_img, line_width, left_pick_coo)
     draw_pick_mask(part_img, line_width, center_pick_coo)
     draw_pick_mask(part_img, line_width, right_pick_coo)
+
+def get_mask_data(part_img, bound_threshold, line_width):
+    mean, mean_indx = get_mean_intensity(part_img)
+    bound = get_boundaries_for_intensity(mean, bound_threshold)
+    extrema = count_number_of_extrema(mean)
+    left_pick, center_pick, right_pick, left_x, center_x, right_x = get_picks_arrays(extrema, mean, bound, mean_indx, part_img)
+    left_pick_coo, center_pick_coo, right_pick_coo = get_picks_coordinates(part_img, left_pick, left_x, center_pick,
+                                                                           center_x, right_pick, right_x)
+    left_part_mask = np.copy(part_img)
+    left_height = left_part_mask.shape[0]
+    left_width = left_part_mask.shape[1]
+    if len(left_pick_coo) > 0:
+        for y in range(0, left_height):
+            for x in range(left_pick_coo[0] - line_width/2, left_pick_coo[0]):
+                left_part_mask[y][x] = [255, 255, 255]
+
+            for x in range(left_pick_coo[0], left_pick_coo[0] + line_width/2):
+                left_part_mask[y][x] = [255, 255, 255]
+
+            for x in range(left_pick_coo[0] + line_width/2, left_width):
+                left_part_mask[y][x] = [0, 0, 0]
+    else:
+        print("No Left pick to get mask")
+        for y in range(0, left_height):
+            for x in range(0, left_width):
+                left_part_mask[y][x] = [0, 0, 0]
+
+    center_part_mask = np.copy(part_img)
+    center_height = center_part_mask.shape[0]
+    center_width = center_part_mask.shape[1]
+    if len(center_pick_coo) > 0:
+        for y in range(0, center_height):
+            for x in range(center_pick_coo[0] - line_width / 2, center_pick_coo[0]):
+                center_part_mask[y][x] = [255, 255, 255]
+
+            for x in range(center_pick_coo[0], center_pick_coo[0] + line_width / 2):
+                center_part_mask[y][x] = [255, 255, 255]
+            # draw all black from right side
+            for x in range(center_pick_coo[0] + line_width / 2, center_width):
+                center_part_mask[y][x] = [0, 0, 0]
+            # draw all black from left side
+            for x in range(0, center_pick_coo[0] - line_width / 2):
+                center_part_mask[y][x] = [0, 0, 0]
+    else:
+        print("No Center pick to get mask")
+        for y in range(0, center_height):
+            for x in range(0, center_width):
+                center_part_mask[y][x] = [0, 0, 0]
+
+
+
+    right_part_mask = np.copy(part_img)
+    right_height = right_part_mask.shape[0]
+    right_width = right_part_mask.shape[1]
+    if len(right_pick_coo) > 0:
+        for y in range(0, right_height):
+            for x in range(right_pick_coo[0] - line_width / 2, right_pick_coo[0]):
+                right_part_mask[y][x] = [255, 255, 255]
+
+            for x in range(right_pick_coo[0], right_pick_coo[0] + line_width / 2):
+                right_part_mask[y][x] = [255, 255, 255]
+
+            # draw all black from right side
+            for x in range(right_pick_coo[0] + line_width / 2, right_width):
+                right_part_mask[y][x] = [0, 0, 0]
+
+            # draw all black from left side
+            for x in range(0, right_pick_coo[0] - line_width / 2):
+                right_part_mask[y][x] = [0, 0, 0]
+    else:
+        print("No Right pick to get mask")
+        for y in range(0, right_height):
+            for x in range(0, right_width):
+                right_part_mask[y][x] = [0, 0, 0]
+
+    return left_part_mask, center_part_mask, right_part_mask
+
 
 # need to fix for 2 (1) line
 btn_down = False
