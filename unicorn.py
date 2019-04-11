@@ -43,6 +43,8 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=5):
     # Return the modified image.
     return img
 
+# Need comments
+# Fix name of pnt1- 4 => lt, lb etc.
 def bird_eye_view(img, pnt1 = [264, 0], pnt2 = [390, 0], pnt3 = [640, 228], pnt4 = [161, 228]):
     # pnt1 = [264, 0]
     # pnt2 = [390, 0]
@@ -53,6 +55,19 @@ def bird_eye_view(img, pnt1 = [264, 0], pnt2 = [390, 0], pnt3 = [640, 228], pnt4
     m = cv2.getPerspectiveTransform(src_pts, dst_pts)
     warped = cv2.warpPerspective(img, m, (img.shape[1], img.shape[0]))  # (maxWidth, maxHeight))
     return warped
+
+def undo_bird_eye_view(img, lt_pnt = [264, 0], rt_pnt = [390, 0], rb_pnt = [640, 228], lb_pnt = [161, 228],
+                            dst_lt_pnt = [0, 0], dst_rt_pnt=[640, 0], dst_rb_pnt=[640, 228], dst_lb_pnt=[0, 228]):
+    # pnt1 = [264, 0]
+    # pnt2 = [390, 0]
+    # pnt3 = [640, 228]
+    # pnt4 = [161, 228]
+    src_pts = np.array([lt_pnt, rt_pnt, rb_pnt, lb_pnt], dtype=np.float32)
+    dst_pts = np.array([dst_lt_pnt, dst_rt_pnt, dst_rb_pnt, dst_lb_pnt], dtype=np.float32)
+    m = cv2.getPerspectiveTransform(src_pts, dst_pts)
+    unwarped = cv2.warpPerspective(img, m, (img.shape[1], img.shape[0]))  # (maxWidth, maxHeight))
+    return unwarped
+
 
 def hsv_green_black_mask(bgr_img):
     hsv_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2HSV)
@@ -254,6 +269,53 @@ def k_get(lines):
 
     return k_tg, k_rad, k_deg
 
+def get_k_deg(line):
+    dx = line[2] - line[0]
+    dy = line[3] - line[1]
+
+    if dx == 0:
+        k_deg = 0
+    else:
+        # k_tg = round(round(dy / float(dx), 4), 4)
+        k_deg = round(math.degrees(math.atan2(dy, dx)), 1)
+
+    if k_deg > 90:
+        k_deg = -(180 - k_deg)
+    elif k_deg < -90:
+        k_deg = -(-180 - k_deg)
+
+    return k_deg
+
+def get_pnts_of_line(img, color):
+    pnts_x = []
+    pnts_y = []
+    for y in range(0, img.shape[0]):
+        for x in range(0, img.shape[1]):
+            if img[y][x][0] == color[0] and img[y][x][1] == color[1] and img[y][x][2] == color[2]:
+                pnts_x.append(x)
+                pnts_y.append(y)
+
+    y_min = min(pnts_y)
+    y_max = max(pnts_y)
+
+    high_x = []
+    low_x = []
+    for x in range(0, img.shape[1]):
+        if img[y_min][x][0] == color[0] and img[y_min][x][1] == color[1] and img[y_min][x][2] == color[2]:
+            high_x.append(x)
+
+        if img[y_max][x][0] == color[0] and img[y_max][x][1] == color[1] and img[y_max][x][2] == color[2]:
+            low_x.append(x)
+
+    high_x_val = int(np.mean(high_x))
+    low_x_val = int(np.mean(low_x))
+
+    line = [high_x_val, y_min, low_x_val, y_max]
+    return line
+
+
+
+
 
 def get_k_b_line(line):
     k = round(float(line[3] - line[1])/(line[2] - line[0]), 4)
@@ -274,6 +336,10 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
 
     rb_pnt = [width - 1, height - 1]
     lb_pnt = [0, height - 1]
+
+    # rb_pnt = [width - 10, height - 1]
+    # lb_pnt = [0 + 10, height - 1]
+
 
     # left bottom corner point
     # for w in range(0, width):
@@ -308,14 +374,14 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
     return lb_pnt, rb_pnt, lt_pnt, rt_pnt
 
 # fix deathzone -> arg
-def count_number_of_extrema(arr):
+def count_number_of_extrema(arr, deathzone = 0.3):
     extrema_count = 0
-    deathzone = 0.02
     for m in range(1, len(arr) - 1):
-        if arr[m] > arr[m - 1] and (arr[m] - arr[m - 1]) > deathzone and arr[m] > arr[m + 1] and (arr[m] - arr[m + 1]) > deathzone:
-            extrema_count += 1
-        if arr[m] < arr[m - 1] and arr[m] < arr[m + 1]:
-            extrema_count += 1
+        if arr[m] > deathzone:
+            if arr[m] > arr[m - 1] and arr[m] > arr[m + 1]:
+                extrema_count += 1
+            if arr[m] < arr[m - 1] and arr[m] < arr[m + 1]:
+                extrema_count += 1
 
     return extrema_count
 
@@ -503,15 +569,15 @@ def draw_pick_pnts(img, left, center, right):
     if len(right) > 0:
         cv2.circle(img, (right[0], right[1]), 3, (0, 0, 255), thickness=-1)
 
-def draw_pick_mask(img, line_width, pick_pnt, color=[255, 100, 100]):
+def draw_pick_mask(img, start_x, end_x, pick_pnt, color=[255, 100, 100]):
     height = img.shape[0]
     if len(pick_pnt) > 0:
         for y in range(0, height):
-            for x in range(pick_pnt[0] - line_width/2, pick_pnt[0]):
+            for x in range(start_x, end_x):
                 img[y][x] = color
 
-            for x in range(pick_pnt[0], pick_pnt[0] + line_width/2):
-                img[y][x] = color
+            # for x in range(pick_pnt[0], pick_pnt[0] + line_width/2):
+            #     img[y][x] = color
     else:
         print("No pick to draw mask")
 
@@ -521,11 +587,32 @@ def draw_magic(part_img, bound_threshold, line_width):
     bound = get_boundaries_for_intensity(mean, bound_threshold)
     extrema = count_number_of_extrema(mean)
     left_pick, center_pick, right_pick, left_x, center_x, right_x = get_picks_arrays(extrema, mean, bound, mean_indx, part_img)
-    left_pick_coo, center_pick_coo, right_pick_coo = get_picks_coordinates(part_img, left_pick, left_x, center_pick, center_x, right_pick, right_x)
+    left_pick_coo, center_pick_coo, right_pick_coo = get_picks_coordinates(part_img, left_pick, left_x, center_pick,
+                                                                           center_x, right_pick, right_x)
 
-    draw_pick_mask(part_img, line_width, left_pick_coo)
-    draw_pick_mask(part_img, line_width, center_pick_coo)
-    draw_pick_mask(part_img, line_width, right_pick_coo)
+    if len(left_x) > 0:
+        end_left_x = max(left_x)
+        start_left_x = min(left_x)
+    else:
+        end_left_x = start_left_x = -1
+    if len(center_x) > 0:
+        end_center_x = max(center_x)
+        start_center_x = min(center_x)
+    else:
+        end_center_x = start_center_x = -1
+    if len(right_x) > 0:
+        end_right_x = max(right_x)
+        start_right_x = min(right_x)
+    else:
+        end_right_x = start_right_x = -1
+
+    # print('left', start_left_x, end_left_x, 'center', start_center_x, end_center_x,
+    #       'right', start_right_x, end_right_x)
+
+
+    draw_pick_mask(part_img, start_left_x, end_left_x, left_pick_coo)
+    draw_pick_mask(part_img, start_center_x, end_center_x, center_pick_coo)
+    draw_pick_mask(part_img, start_right_x, end_right_x, right_pick_coo)
 
 def get_mask_data(part_img, bound_threshold, line_width):
     mean, mean_indx = get_mean_intensity(part_img)
@@ -534,18 +621,44 @@ def get_mask_data(part_img, bound_threshold, line_width):
     left_pick, center_pick, right_pick, left_x, center_x, right_x = get_picks_arrays(extrema, mean, bound, mean_indx, part_img)
     left_pick_coo, center_pick_coo, right_pick_coo = get_picks_coordinates(part_img, left_pick, left_x, center_pick,
                                                                            center_x, right_pick, right_x)
+
+    if len(left_x) > 0:
+        end_left_x = max(left_x)
+        start_left_x = min(left_x)
+    else:
+        end_left_x = start_left_x = -1
+    if len(center_x) > 0:
+        end_center_x = max(center_x)
+        start_center_x = min(center_x)
+    else:
+        end_center_x = start_center_x = -1
+    if len(right_x) > 0:
+        end_right_x = max(right_x)
+        start_right_x = min(right_x)
+    else:
+        end_right_x = start_right_x = -1
+
+
+
     left_part_mask = np.copy(part_img)
     left_height = left_part_mask.shape[0]
     left_width = left_part_mask.shape[1]
     if len(left_pick_coo) > 0:
         for y in range(0, left_height):
-            for x in range(left_pick_coo[0] - line_width/2, left_pick_coo[0]):
+            # print("y", y, 'left star/end', start_left_x, end_left_x)
+            for x in range(start_left_x, end_left_x+1):
+                # print('x', x)
                 left_part_mask[y][x] = [255, 255, 255]
 
-            for x in range(left_pick_coo[0], left_pick_coo[0] + line_width/2):
-                left_part_mask[y][x] = [255, 255, 255]
+            for x in range(0, start_left_x):
+                # print('clear x', x)
+                left_part_mask[y][x] = [0, 0, 0]
 
-            for x in range(left_pick_coo[0] + line_width/2, left_width):
+            # for x in range(left_pick_coo[0], left_pick_coo[0] + line_width/2):
+            #     left_part_mask[y][x] = [255, 255, 255]
+
+            for x in range(end_left_x+1, part_img.shape[1]):
+                # print('clear x', x)
                 left_part_mask[y][x] = [0, 0, 0]
     else:
         print("No Left pick to get mask")
@@ -558,16 +671,21 @@ def get_mask_data(part_img, bound_threshold, line_width):
     center_width = center_part_mask.shape[1]
     if len(center_pick_coo) > 0:
         for y in range(0, center_height):
-            for x in range(center_pick_coo[0] - line_width / 2, center_pick_coo[0]):
+            # print("y", y, 'center star/end', start_center_x, end_center_x)
+            for x in range(start_center_x, end_center_x+1):
                 center_part_mask[y][x] = [255, 255, 255]
 
-            for x in range(center_pick_coo[0], center_pick_coo[0] + line_width / 2):
-                center_part_mask[y][x] = [255, 255, 255]
-            # draw all black from right side
-            for x in range(center_pick_coo[0] + line_width / 2, center_width):
-                center_part_mask[y][x] = [0, 0, 0]
+            # for x in range(center_pick_coo[0], center_pick_coo[0] + line_width / 2):
+            #     center_part_mask[y][x] = [255, 255, 255]
             # draw all black from left side
-            for x in range(0, center_pick_coo[0] - line_width / 2):
+            for x in range(0, start_center_x):
+                # print('x', x)
+
+                center_part_mask[y][x] = [0, 0, 0]
+            # draw all black from right side
+            for x in range(end_center_x+1, part_img.shape[1]):
+                # print('x', x)
+
                 center_part_mask[y][x] = [0, 0, 0]
     else:
         print("No Center pick to get mask")
@@ -575,25 +693,24 @@ def get_mask_data(part_img, bound_threshold, line_width):
             for x in range(0, center_width):
                 center_part_mask[y][x] = [0, 0, 0]
 
-
-
     right_part_mask = np.copy(part_img)
     right_height = right_part_mask.shape[0]
     right_width = right_part_mask.shape[1]
     if len(right_pick_coo) > 0:
         for y in range(0, right_height):
-            for x in range(right_pick_coo[0] - line_width / 2, right_pick_coo[0]):
+            # print("y", y, 'right star/end', start_right_x, end_right_x)
+            for x in range(start_right_x, end_right_x+1):
                 right_part_mask[y][x] = [255, 255, 255]
 
-            for x in range(right_pick_coo[0], right_pick_coo[0] + line_width / 2):
-                right_part_mask[y][x] = [255, 255, 255]
+            # for x in range(right_pick_coo[0], right_pick_coo[0] + line_width / 2):
+            #     right_part_mask[y][x] = [255, 255, 255]
 
             # draw all black from right side
-            for x in range(right_pick_coo[0] + line_width / 2, right_width):
+            for x in range(end_right_x+1, part_img.shape[1]):
                 right_part_mask[y][x] = [0, 0, 0]
 
             # draw all black from left side
-            for x in range(0, right_pick_coo[0] - line_width / 2):
+            for x in range(0, start_right_x):
                 right_part_mask[y][x] = [0, 0, 0]
     else:
         print("No Right pick to get mask")
@@ -602,6 +719,22 @@ def get_mask_data(part_img, bound_threshold, line_width):
                 right_part_mask[y][x] = [0, 0, 0]
 
     return left_part_mask, center_part_mask, right_part_mask
+
+
+def draw_pw_lines(img,pts,color):
+    # draw lines
+    pts = np.int_(pts)
+    for i in range(10):
+        x1 = pts[0][i][0]
+        y1 = pts[0][i][1]
+        x2 = pts[0][i+1][0]
+        y2 = pts[0][i+1][1]
+        cv2.line(img, (x1, y1), (x2, y2),color,5)
+
+def draw_magic_line(img, pnts, color, thickness=5):
+    pnts = np.int_(pnts)
+    cv2.line(img, (pnts[0][0][0], pnts[0][0][1]), (pnts[0][1][0], pnts[0][1][1]), color, thickness=thickness)
+
 
 
 # need to fix for 2 (1) line
