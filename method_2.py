@@ -1,54 +1,45 @@
 #!/usr/bin/python
 
-
-# from __future__ import print_function
 import numpy as np
 import cv2
-import glob
-import matplotlib.pyplot as plt
-import math
-import pickle
 import unicorn
-from scipy import ndimage
-import scipy
-# from skimage.filters import roberts, sobel
-'''
-with open('cal_param_opts.txt', 'rb') as fp:
-    opts = pickle.load(fp)
+import time
+import matplotlib.pyplot as plt
 
-with open('cal_param_ipts.txt', 'rb') as fp:
-    ipts = pickle.load(fp)
-'''
-
-pic_num = '000'
+start = time.time()
+pic_num = '303' # not working!!!!!!!!!!!!!!!
 
 ref_img = cv2.imread('input_imgs/frame000' + pic_num + '.png')
 image = cv2.imread('input_masks/frame000' + pic_num + '_mask.pgm')
 
 crop_img = unicorn.find_low_border_of_roi_m2(image, roi_window=10, x_limit=60, show_border=0)
+crop_img_lined = unicorn.find_low_border_of_roi_m2(image, roi_window=10, x_limit=60, show_border=1)
 height = crop_img.shape[0]
 width = crop_img.shape[1]
 
-lb_pnt, rb_pnt, lt_pnt, rt_pnt = unicorn.get_4_pnts_for_warping(crop_img, 2, draw_pnts=0)
+# fig0 = plt.figure(figsize=(8, 8))
+# plt.subplot(2, 1, 1)
+# plt.imshow(crop_img)
+# plt.subplot(2, 1, 2)
+# plt.imshow(crop_img_lined)
+# plt.show()
 
-# wiith resiezed - not working, x-coo is changing T_T
-quad_img = cv2.resize(crop_img, (width, 100))
-test_warp = unicorn.bird_eye_view(quad_img, lt_pnt, rt_pnt, rb_pnt, lb_pnt)
-######################################################
+# dx 000 = 2
+# dx 007 = 20
+# dx 090 = 10
+# dx 118 = 5
 
-q_width = quad_img.shape[1]
-q_height = quad_img.shape[0]
-
+lb_pnt, rb_pnt, lt_pnt, rt_pnt = unicorn.get_4_pnts_for_warping(crop_img, 70, draw_pnts=0)
 warped_img = unicorn.bird_eye_view(crop_img, lt_pnt, rt_pnt, rb_pnt, lb_pnt)
 
-''' to get image for article (fig 9)
+# ''' to get image for article (fig 9)
 fig = plt.figure(figsize=(8, 8))
 plt.subplot(2,1,1)
 plt.imshow(crop_img)
 plt.subplot(2,1,2)
 plt.imshow(warped_img)
-'''
-
+# '''
+plt.show()
 gray_img = cv2.cvtColor(warped_img, cv2.COLOR_BGR2GRAY)
 mean_lines, mean_indexes = unicorn.get_mean_intensity(gray_img)
 boundaries = unicorn.get_boundaries_for_intensity(mean_lines, 5)
@@ -474,7 +465,7 @@ res_img = cv2.addWeighted(ref_crop_img, 1, unwarp_img, 0.5, 0)
 unw_left_line = unicorn.get_pnts_of_line(unwarp_img, color_L)
 unw_left_k, unw_left_b = unicorn.get_k_b_line(unw_left_line)
 unw_left_k_deg = unicorn.get_k_deg(unw_left_line)
-print 'left k', unw_left_k, 'left_k_deg', unw_left_k_deg
+# print 'left k', unw_left_k, 'left_k_deg', unw_left_k_deg
 
 unw_center_line = unicorn.get_pnts_of_line(unwarp_img, color_C)
 unw_center_k_deg = unicorn.get_k_deg(unw_center_line)
@@ -489,7 +480,8 @@ cv2.putText(unwarp_img, str(unw_left_k_deg), (5, 25), font, 1, (255, 0, 0), thic
 cv2.putText(unwarp_img, str(unw_center_k_deg), (150, 25), font, 1, (255, 0, 0), thickness=2)
 cv2.putText(unwarp_img, str(unw_right_k_deg), (250, 25), font, 1, (255, 0, 0), thickness=2)
 
-
+end = time.time()
+print(end - start)
 ''' fig 19
 fig9= plt.figure(figsize=(8, 6))
 plt.subplot(2, 1, 1)
@@ -498,13 +490,14 @@ plt.subplot(2, 1, 2)
 plt.imshow(unwarp_img)
 '''
 
-fig10 = plt.figure(figsize=(8, 4))
+# fig10 = plt.figure(figsize=(8, 4))
+
 # plt.subplot(2,1,1)
 # plt.imshow(res_img)
 # plt.subplot(2,1,2)
-plt.imshow(unwarp_img)
 
-plt.show()
+# plt.imshow(unwarp_img)
+# plt.show()
 
 
 

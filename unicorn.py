@@ -216,17 +216,19 @@ def find_low_border_of_roi_m2(img, roi_window, x_limit, show_border=0 ):
     # go through first [0] vertical line of image
     # search for white pixel
     for x in range(0, x_limit):
-        for pix in range(height - 1, 0, -1):
+        for y in range(height - 1, 0, -1):
             # check the left border pixel
-            if img[pix][x][0] >= 254:
+            if img[y][x][0] >= 254:
                 for loc_x in range(width-1, 0, -1):
-                    for loc_pix in range(pix, pix - roi_window, -1):
+                    for loc_pix in range(y, y - roi_window, -1):
                         # if white pixel is found
                         # crop/draw border
                         if img[loc_pix][loc_x][0] >= 254:
                             line_not_found = 1
                             if show_border == 0:
-                                crop_img = img[0:loc_pix-10, 0:width]
+                                # FIX!!!!!!!!!!!
+                                # -20 !!!!!!!!!!!!!!!!!!!
+                                crop_img = img[0:loc_pix-20, 0:width]
                             else:
                                 cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=2)
                             break
@@ -236,7 +238,7 @@ def find_low_border_of_roi_m2(img, roi_window, x_limit, show_border=0 ):
         if line_not_found == 1:
             break
     if line_not_found == 0:
-        print("Ops! Border is not found")
+        print("Oops! Border is not found")
     else:
         print("Border is found successfully!")
 

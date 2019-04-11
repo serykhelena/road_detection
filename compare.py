@@ -5,11 +5,15 @@ import numpy as np
 import unicorn
 import matplotlib.pyplot as plt
 # import matplotlib.image as mpimg
+import time
+
+start = time.time()
+
+pic_num = '118'
 
 
-
-inp_img = cv2.imread('input_imgs/frame000681.png')
-inp_mask = cv2.imread('input_masks/frame000681_mask.pgm')
+inp_img = cv2.imread('input_imgs/frame000' + pic_num + '.png')
+inp_mask = cv2.imread('input_masks/frame000' + pic_num + '_mask.pgm')
 inp_mask_new_size = cv2.resize(inp_mask, (640, 480), interpolation=cv2.INTER_CUBIC)
 
 height = inp_mask_new_size.shape[0]
@@ -27,8 +31,7 @@ canny_img = cv2.Canny(gray_img, 100, 200)
 canny_rgb = cv2.cvtColor(canny_img, cv2.COLOR_GRAY2BGR)
 
 
-ref_pts, ref_crop = unicorn.get_points(canny_rgb)
-
+# ref_pts, ref_crop = unicorn.get_points(canny_rgb)
 
 hough_lines = cv2.HoughLinesP(
     canny_img,
@@ -234,71 +237,85 @@ apprx_left_line = [left_x_start, max_y_left, left_x_end, min_y_left]
 apprx_center_line = [max_center_x, max_center_y, min_center_x, min_center_y]
 apprx_right_line = [right_x_start, max_y_right, right_x_end, min_y_right]
 
-
-combine_line = np.bitwise_or(three_line_img, ref_crop)
-print(ref_pts)
-ref_right_line = [ref_pts[0][1][0], ref_pts[0][1][1], ref_pts[0][0][0], ref_pts[0][0][1]]
-ref_center_line = [ref_pts[1][1][0], ref_pts[1][1][1], ref_pts[1][0][0], ref_pts[1][0][1]]
-ref_left_line = [ref_pts[2][1][0], ref_pts[2][1][1], ref_pts[2][0][0], ref_pts[2][0][1]]
+#
+# combine_line = np.bitwise_or(three_line_img, ref_crop)
+# print(ref_pts)
+# ref_right_line = [ref_pts[0][1][0], ref_pts[0][1][1], ref_pts[0][0][0], ref_pts[0][0][1]]
+# ref_center_line = [ref_pts[1][1][0], ref_pts[1][1][1], ref_pts[1][0][0], ref_pts[1][0][1]]
+# ref_left_line = [ref_pts[2][1][0], ref_pts[2][1][1], ref_pts[2][0][0], ref_pts[2][0][1]]
 
 left_k, left_b = unicorn.get_k_b_line(apprx_left_line)
 right_k, right_b = unicorn.get_k_b_line(apprx_right_line)
 cntr_k, cntr_b = unicorn.get_k_b_line(apprx_center_line)
 
-ref_left_k, ref_left_b = unicorn.get_k_b_line(ref_left_line)
-ref_right_k, ref_right_b = unicorn.get_k_b_line(ref_right_line)
-ref_cntr_k, ref_cntr_b = unicorn.get_k_b_line(ref_center_line)
+left_k_deg = round(unicorn.get_k_deg(apprx_left_line), 1)
+center_k_deg = round(unicorn.get_k_deg(apprx_center_line), 1)
+right_k_deg = round(unicorn.get_k_deg(apprx_right_line), 1)
+
+# ref_left_k, ref_left_b = unicorn.get_k_b_line(ref_left_line)
+# ref_right_k, ref_right_b = unicorn.get_k_b_line(ref_right_line)
+# ref_cntr_k, ref_cntr_b = unicorn.get_k_b_line(ref_center_line)
 
 
-print("Left coo:", apprx_left_line, "k:", left_k, "b:", left_b)
-print("Center coo:", apprx_center_line,"k:", cntr_k, "b:", cntr_b)
-print("Right coo:", apprx_right_line, "k:", right_k, "b:", right_b)
+# print("Left coo:", apprx_left_line, "k:", left_k, "b:", left_b)
+# print("Center coo:", apprx_center_line,"k:", cntr_k, "b:", cntr_b)
+# print("Right coo:", apprx_right_line, "k:", right_k, "b:", right_b)
 
-print("Ref left:", ref_left_line, "k:", ref_left_k, "b:", ref_left_b)
-print("Ref center:", ref_center_line, "k:", ref_cntr_k, "b:", ref_cntr_b)
-print("Ref right:", ref_right_line, "k:", ref_right_k, "b:", ref_right_b)
-
-dif_left_k = round(abs(ref_left_k) - abs(left_k), 2)
-dif_center_k = round(abs(ref_cntr_k) - abs(cntr_k), 2)
-dif_right_k = round(abs(ref_right_k) - abs(right_k), 2)
-
-
-dif_left_b = round(abs(ref_left_b - left_b), 2)
-dif_center_b = round(abs(ref_cntr_b - cntr_b), 2)
-dif_right_b = round(abs(ref_right_b - right_b), 2)
+# print("Ref left:", ref_left_line, "k:", ref_left_k, "b:", ref_left_b)
+# print("Ref center:", ref_center_line, "k:", ref_cntr_k, "b:", ref_cntr_b)
+# print("Ref right:", ref_right_line, "k:", ref_right_k, "b:", ref_right_b)
+#
+# dif_left_k = round(abs(ref_left_k) - abs(left_k), 2)
+# dif_center_k = round(abs(ref_cntr_k) - abs(cntr_k), 2)
+# dif_right_k = round(abs(ref_right_k) - abs(right_k), 2)
+#
+#
+# dif_left_b = round(abs(ref_left_b - left_b), 2)
+# dif_center_b = round(abs(ref_cntr_b - cntr_b), 2)
+# dif_right_b = round(abs(ref_right_b - right_b), 2)
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-cv2.putText(combine_line, str(dif_left_k), (20, 50), font, 1, (255, 0, 0), thickness=2)
-cv2.putText(combine_line, str(dif_center_k), (320, 50), font, 1, (255, 0, 0), thickness=2)
-cv2.putText(combine_line, str(dif_right_k), (520, 50), font, 1, (255, 0, 0), thickness=2)
+cv2.putText(three_line_img, str(left_k_deg), (20, 50), font, 1, (255, 0, 0), thickness=2)
+cv2.putText(three_line_img, str(center_k_deg), (300, 50), font, 1, (255, 0, 0), thickness=2)
+cv2.putText(three_line_img, str(right_k_deg), (520, 50), font, 1, (255, 0, 0), thickness=2)
 
-print("D_k left", dif_left_k, "D_b left", dif_left_b)
-print("D_k center", dif_center_k, "D_b center", dif_center_b)
-print("D_k right", dif_right_k, "D_b right", dif_right_b)
+# print("D_k left", dif_left_k, "D_b left", dif_left_b)
+# print("D_k center", dif_center_k, "D_b center", dif_center_b)
+# print("D_k right", dif_right_k, "D_b right", dif_right_b)
 
-fig = plt.figure(figsize=(8, 8))
+# fig = plt.figure(figsize=(8, 8))
+# plt.imshow(three_line_img)
+
+
 
 # plt.imshow(ref_crop)
-fig.add_subplot(3, 1, 1)
-plt.imshow(ref_crop)
-fig.add_subplot(3, 1, 2)
-plt.imshow(three_line_img)
-fig.add_subplot(3, 1, 3)
-plt.imshow(combine_line)
+# fig.add_subplot(3, 1, 1)
+# plt.imshow(ref_crop)
+# fig.add_subplot(3, 1, 2)
+
+# fig.add_subplot(3, 1, 3)
+# plt.imshow(combine_line)
 # fig.add_subplot(5, 1, 4)
 # plt.imshow(center_limit_draw)
 # fig.add_subplot(5, 1, 5)
 # plt.imshow(crop_img)
 
-plt.show()
-cv2.waitKey(0)
-cv2.destroyAllWindows()
 
-cv2.imwrite('roi_imgs/roi000681.png', crop_img)
+# fig = plt.figure(figsize=(8, 8))
+# plt.imshow(three_line_img)
+# plt.show()
 
-cv2.imwrite('roi_imgs/roi000681_lined.png', crop_img_lined)
-cv2.imwrite('first_method_output/compare000681.png', combine_line)
+
+
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+end = time.time()
+print(end - start)
+# cv2.imwrite('roi_imgs/roi000681.png', crop_img)
+
+# cv2.imwrite('roi_imgs/roi000681_lined.png', crop_img_lined)
+# cv2.imwrite('first_method_output/compare000681.png', combine_line)
 
 
 # cv2.imwrite('sort_lines/slope000000.png', k_center_draw)
