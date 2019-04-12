@@ -206,35 +206,41 @@ def find_low_border_of_roi(img, roi_window, x_limit, show_border=0 ):
 
     return crop_img
 
-def find_low_border_of_roi_m2(img, roi_window, x_limit, show_border=0 ):
+'''
+    Crop input image to get prepared image 
+    for perspective transformation
+    picture should have at least two lines 
+    edges of lines can not be at the edge of image 
+'''
+def find_low_border_of_roi_m2(img, y_limit, x_limit, show_border=0 ):
     crop_img = img.copy()
     height = img.shape[0]
     width = img.shape[1]
-
+    left_right_x_lim = 15
     line_not_found = 0  # boolean flag for checking condition of software
-
     # go through first [0] vertical line of image
     # search for white pixel
     for x in range(0, x_limit):
         for y in range(height - 1, 0, -1):
             # check the left border pixel
             if img[y][x][0] >= 254:
-                for loc_x in range(width-1, 0, -1):
-                    for loc_pix in range(y, y - roi_window, -1):
-                        # if white pixel is found
-                        # crop/draw border
-                        if img[loc_pix][loc_x][0] >= 254:
-                            line_not_found = 1
-                            if show_border == 0:
-                                # FIX!!!!!!!!!!!
-                                # -20 !!!!!!!!!!!!!!!!!!!
-                                crop_img = img[0:loc_pix-20, 0:width]
-                            else:
-                                cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=2)
+                if x > left_right_x_lim:
+                    for loc_x in range(width-1, 0, -1):
+                        for loc_pix in range(y, y - y_limit, -1):
+                            # if white pixel is found
+                            # crop/draw border
+                            if img[loc_pix][loc_x][0] >= 254:
+                                # crop the image only if pixel is not on the
+                                # edge of image
+                                if loc_x < width - 1 - left_right_x_lim:
+                                    line_not_found = 1
+                                    if show_border == 0:
+                                        crop_img = img[0:loc_pix, 0:width]
+                                    else:
+                                        cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=2)
+                                    break
+                        if line_not_found == 1:
                             break
-
-                    if line_not_found == 1:
-                        break
         if line_not_found == 1:
             break
     if line_not_found == 0:
@@ -243,6 +249,31 @@ def find_low_border_of_roi_m2(img, roi_window, x_limit, show_border=0 ):
         print("Border is found successfully!")
 
     return crop_img
+
+
+
+# def divide_height_image(img, parts):
+#     height = img.shape[0]
+#     if height%parts == 0:
+#         dh = height / parts
+#     else:
+#         dh = height / parts
+#         last_dh = height - (dh * parts)
+
+
+
+
+    '''
+    Get image with all black pixels 
+    size is simillar as input image
+'''
+def make_image_all_black(img):
+    black_img = np.copy(img)
+    for y in range(0, black_img.shape[0]):
+        for x in range(0, black_img.shape[1]):
+            black_img[y][x] = [0, 0, 0]
+    return black_img
+
 
 def k_get(lines):
     k_tg = []
