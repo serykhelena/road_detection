@@ -386,16 +386,57 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
     #         rb_pnt = [w, height - 1]
     #         break
 
+    next_y = 0
+    lt_found = 0
     # left top corner point
-    for top in range(0, width):
-        if img[0][top][0] > 0:
-            lt_pnt = [top - top_dx, 0]
+    for y in range(0, height):
+        next_y = 0
+        for top in range(0, width):
+            if img[y][top][0] > 0:
+                if top > 135: # think about how to figure out limits automatically
+                    next_y = 1
+                else:
+                    lt_pnt = [top - top_dx, y]
+                    lt_found = 1
+                    break
+
+            if next_y == 1 or lt_found == 1:
+                break
+        if lt_found == 1:
             break
 
+    rt_found = 0
+    check_r_line = 0
+    check_next_y = 0
     # right top corner point
-    for x in range(width - 1, 0, -1):
-        if img[0][x][0] > 0:
-            rt_pnt = [x + top_dx, 0]
+    for y in range(0, height):
+        next_y = 0
+        for x in range(width - 1, 0, -1):
+            if img[y][x][0] > 0:
+                if x < 170:
+                    next_y = 1
+                else:
+                    # for check_y in range(y, y + 10):
+                    #     check_next_y = 0
+                    #     for check_x in range(x, width):
+                    #         if img[check_y][check_x][0] > 0:
+                    #             check_r_line += 1
+                    #             check_next_y = 1
+                    #             break
+                    #         if check_next_y == 1:
+                    #             break
+                    # print 'check right line', check_r_line
+                    # if check_r_line >= 10 and check_next_y == 1:
+                    rt_pnt = [x + top_dx, 0]
+                    rt_found = 1
+                    break
+                    # else:
+                    #     rt_found = 0
+                    #     next_y = 1
+
+            if next_y == 1 or rt_found == 1:
+                break
+        if rt_found == 1:
             break
 
     if draw_pnts == 1:
@@ -403,6 +444,8 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
         cv2.circle(img, (rb_pnt[0], rb_pnt[1]), 2, (255, 0, 0), thickness=-1)
         cv2.circle(img, (lt_pnt[0], lt_pnt[1]), 2, (255, 0, 0), thickness=-1)
         cv2.circle(img, (rt_pnt[0], rt_pnt[1]), 2, (255, 0, 0), thickness=-1)
+
+    print 'lt', lt_pnt, 'rt', rt_pnt
 
     return lb_pnt, rb_pnt, lt_pnt, rt_pnt
 

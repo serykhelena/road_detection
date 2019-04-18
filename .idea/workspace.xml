@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d101c71-a731-4ed2-8252-3323ee01e007" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/method_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/method_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unicorn.py" beforeDir="false" afterPath="$PROJECT_DIR$/unicorn.py" afterDir="false" />
     </list>
@@ -13,14 +12,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4591988">
+    <splitter split-orientation="horizontal" split-proportion="0.56962025">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/unicorn.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="179">
-                  <caret line="262" selection-start-line="262" selection-end-line="262" />
+                <state relative-caret-position="344">
+                  <caret line="435" lean-forward="true" selection-start-line="432" selection-start-column="22" selection-end-line="435" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -31,7 +30,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/compare.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="209">
+                <state relative-caret-position="4485">
                   <caret line="304" selection-start-line="304" selection-start-column="2" selection-end-line="306" selection-end-column="12" />
                   <folding>
                     <element signature="e#19#29#0" expanded="true" />
@@ -59,8 +58,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/method_2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="270">
-                  <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+                <state relative-caret-position="269">
+                  <caret line="33" column="75" selection-start-line="33" selection-start-column="75" selection-end-line="33" selection-end-column="75" />
                   <folding>
                     <element signature="e#19#37#0" expanded="true" />
                   </folding>
@@ -114,6 +113,22 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="input_masks" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -130,22 +145,6 @@
               <item name="road_detection" type="b2602c69:ProjectViewProjectNode" />
               <item name="road_detection" type="462c0819:PsiDirectoryNode" />
               <item name="pics_one_lane_x" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="road_detection" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/road_detection" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="input_masks" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -309,14 +308,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-1" width="1368" height="749" extended-state="6" />
+    <frame x="0" y="0" width="1366" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14519732" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1764706" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32886904" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.28870967" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28870967" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -414,6 +414,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/numpy/core/_methods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compare.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4485">
+          <caret line="304" selection-start-line="304" selection-start-column="2" selection-end-line="306" selection-end-column="12" />
+          <folding>
+            <element signature="e#19#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mouse_click.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
@@ -424,39 +441,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/compare.py">
+    <entry file="file://$PROJECT_DIR$/method_2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="304" selection-start-line="304" selection-start-column="2" selection-end-line="306" selection-end-column="12" />
+        <state relative-caret-position="269">
+          <caret line="33" column="75" selection-start-line="33" selection-start-column="75" selection-end-line="33" selection-end-column="75" />
           <folding>
-            <element signature="e#19#29#0" expanded="true" />
+            <element signature="e#19#37#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/numpy/core/_methods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="84" selection-start-line="84" selection-end-line="84" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/unicorn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="262" selection-start-line="262" selection-end-line="262" />
+        <state relative-caret-position="344">
+          <caret line="435" lean-forward="true" selection-start-line="432" selection-start-column="22" selection-end-line="435" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/method_2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
-          <folding>
-            <element signature="e#19#37#0" expanded="true" />
           </folding>
         </state>
       </provider>

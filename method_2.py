@@ -7,7 +7,7 @@ import time
 import matplotlib.pyplot as plt
 
 start = time.time()
-pic_num = '170'
+pic_num = '235'
 
 ref_img = cv2.imread('input_imgs/frame000' + pic_num + '.png')
 image = cv2.imread('input_masks/frame000' + pic_num + '_mask.pgm')
@@ -28,10 +28,12 @@ plt.show()
 # dx 007 = 20
 # dx 090 = 10
 # dx 118 = 5
-# dx 170 =
+# dx 170 = 2
+# dx 235 =
 
-lb_pnt, rb_pnt, lt_pnt, rt_pnt = unicorn.get_4_pnts_for_warping(crop_img, 5, draw_pnts=0)
+lb_pnt, rb_pnt, lt_pnt, rt_pnt = unicorn.get_4_pnts_for_warping(crop_img, 0, draw_pnts=1)
 warped_img = unicorn.bird_eye_view(crop_img, lt_pnt, rt_pnt, rb_pnt, lb_pnt)
+
 
 # ''' to get image for article (fig 9)
 fig = plt.figure(figsize=(8, 8))
@@ -481,14 +483,14 @@ plt.subplot(2, 1, 2)
 plt.imshow(unwarp_img)
 '''
 
-# fig10 = plt.figure(figsize=(8, 4))
+fig10 = plt.figure(figsize=(8, 4))
 
-# plt.subplot(2,1,1)
-# plt.imshow(res_img)
-# plt.subplot(2,1,2)
+plt.subplot(2,1,1)
+plt.imshow(res_img)
+plt.subplot(2,1,2)
 
-# plt.imshow(unwarp_img)
-# plt.show()
+plt.imshow(unwarp_img)
+plt.show()
 
 
 
