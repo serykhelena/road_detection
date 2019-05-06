@@ -7,30 +7,33 @@ import time
 import matplotlib.pyplot as plt
 
 start = time.time()
-pic_num = '303' # not working!!!!!!!!!!!!!!!
+pic_num = '235'
 
 ref_img = cv2.imread('input_imgs/frame000' + pic_num + '.png')
 image = cv2.imread('input_masks/frame000' + pic_num + '_mask.pgm')
 
-crop_img = unicorn.find_low_border_of_roi_m2(image, roi_window=10, x_limit=60, show_border=0)
-crop_img_lined = unicorn.find_low_border_of_roi_m2(image, roi_window=10, x_limit=60, show_border=1)
+crop_img = unicorn.find_low_border_of_roi_m2(image, y_limit=10, x_limit=60, show_border=0)
+crop_img_lined = unicorn.find_low_border_of_roi_m2(image, y_limit=10, x_limit=60, show_border=1)
 height = crop_img.shape[0]
 width = crop_img.shape[1]
 
-# fig0 = plt.figure(figsize=(8, 8))
-# plt.subplot(2, 1, 1)
-# plt.imshow(crop_img)
-# plt.subplot(2, 1, 2)
-# plt.imshow(crop_img_lined)
-# plt.show()
+fig0 = plt.figure(figsize=(8, 8))
+plt.subplot(2, 1, 1)
+plt.imshow(crop_img)
+plt.subplot(2, 1, 2)
+plt.imshow(crop_img_lined)
+plt.show()
 
 # dx 000 = 2
 # dx 007 = 20
 # dx 090 = 10
 # dx 118 = 5
+# dx 170 = 2
+# dx 235 =
 
-lb_pnt, rb_pnt, lt_pnt, rt_pnt = unicorn.get_4_pnts_for_warping(crop_img, 70, draw_pnts=0)
+lb_pnt, rb_pnt, lt_pnt, rt_pnt = unicorn.get_4_pnts_for_warping(crop_img, 0, draw_pnts=1)
 warped_img = unicorn.bird_eye_view(crop_img, lt_pnt, rt_pnt, rb_pnt, lb_pnt)
+
 
 # ''' to get image for article (fig 9)
 fig = plt.figure(figsize=(8, 8))
@@ -40,6 +43,7 @@ plt.subplot(2,1,2)
 plt.imshow(warped_img)
 # '''
 plt.show()
+
 gray_img = cv2.cvtColor(warped_img, cv2.COLOR_BGR2GRAY)
 mean_lines, mean_indexes = unicorn.get_mean_intensity(gray_img)
 boundaries = unicorn.get_boundaries_for_intensity(mean_lines, 5)
@@ -98,7 +102,7 @@ mean_5, ind_5 = unicorn.get_mean_intensity(warp5)
 # unicorn.draw_magic(warp5, bound_limit, line_width)
 left_mask_5, center_mask_5, right_mask_5 = unicorn.get_mask_data(warp5, bound_limit, line_width)
 
-''' to get pic for article (fig 12)
+# ''' to get pic for article (fig 12)
 fig2 = plt.figure(figsize=(8, 8))
 plt.subplot(10,1,1)
 plt.imshow(warp1)
@@ -134,22 +138,14 @@ plt.ylim(0, height)
 
 fig3 = plt.figure(figsize=(8, 4))
 plt.imshow(warped_img)
-'''
+# '''
+plt.show()
 
-left_mask = np.copy(warped_img)
-for y in range(0, left_mask.shape[0]):
-    for x in range(0, left_mask.shape[1]):
-        left_mask[y][x] = [0, 0, 0]
+left_mask = unicorn.make_image_all_black(warped_img)
+center_mask = unicorn.make_image_all_black(warped_img)
+right_mask = unicorn.make_image_all_black(warped_img)
 
-center_mask = np.copy(warped_img)
-for y in range(0, center_mask.shape[0]):
-    for x in range(0, center_mask.shape[1]):
-        center_mask[y][x] = [0, 0, 0]
 
-right_mask = np.copy(warped_img)
-for y in range(0, right_mask.shape[0]):
-    for x in range(0, right_mask.shape[1]):
-        right_mask[y][x] = [0, 0, 0]
 
 # y -> 0 - 12
 for y in range(0, warp1.shape[0]):
@@ -160,10 +156,7 @@ for y in range(0, warp1.shape[0]):
 
 # y -> 12 - 24
 for y in range(0, warp1.shape[0]):
-    # print('y', y)
     for x in range(0, warp1.shape[1]):
-        # print('y',y+warp1.shape[0],'x', x, 'val', center_mask_2[y][x])
-
         left_mask[y+warp1.shape[0]][x] = left_mask_2[y][x]
         center_mask[y+warp1.shape[0]][x] = center_mask_2[y][x]
         right_mask[y+warp1.shape[0]][x] = right_mask_2[y][x]
@@ -490,14 +483,14 @@ plt.subplot(2, 1, 2)
 plt.imshow(unwarp_img)
 '''
 
-# fig10 = plt.figure(figsize=(8, 4))
+fig10 = plt.figure(figsize=(8, 4))
 
-# plt.subplot(2,1,1)
-# plt.imshow(res_img)
-# plt.subplot(2,1,2)
+plt.subplot(2,1,1)
+plt.imshow(res_img)
+plt.subplot(2,1,2)
 
-# plt.imshow(unwarp_img)
-# plt.show()
+plt.imshow(unwarp_img)
+plt.show()
 
 
 

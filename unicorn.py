@@ -206,35 +206,41 @@ def find_low_border_of_roi(img, roi_window, x_limit, show_border=0 ):
 
     return crop_img
 
-def find_low_border_of_roi_m2(img, roi_window, x_limit, show_border=0 ):
+'''
+    Crop input image to get prepared image 
+    for perspective transformation
+    picture should have at least two lines 
+    edges of lines can not be at the edge of image 
+'''
+def find_low_border_of_roi_m2(img, y_limit, x_limit, show_border=0 ):
     crop_img = img.copy()
     height = img.shape[0]
     width = img.shape[1]
-
+    left_right_x_lim = 15
     line_not_found = 0  # boolean flag for checking condition of software
-
     # go through first [0] vertical line of image
     # search for white pixel
     for x in range(0, x_limit):
         for y in range(height - 1, 0, -1):
             # check the left border pixel
             if img[y][x][0] >= 254:
-                for loc_x in range(width-1, 0, -1):
-                    for loc_pix in range(y, y - roi_window, -1):
-                        # if white pixel is found
-                        # crop/draw border
-                        if img[loc_pix][loc_x][0] >= 254:
-                            line_not_found = 1
-                            if show_border == 0:
-                                # FIX!!!!!!!!!!!
-                                # -20 !!!!!!!!!!!!!!!!!!!
-                                crop_img = img[0:loc_pix-20, 0:width]
-                            else:
-                                cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=2)
+                if x > left_right_x_lim:
+                    for loc_x in range(width-1, 0, -1):
+                        for loc_pix in range(y, y - y_limit, -1):
+                            # if white pixel is found
+                            # crop/draw border
+                            if img[loc_pix][loc_x][0] >= 254:
+                                # crop the image only if pixel is not on the
+                                # edge of image
+                                if loc_x < width - 1 - left_right_x_lim:
+                                    line_not_found = 1
+                                    if show_border == 0:
+                                        crop_img = img[0:loc_pix, 0:width]
+                                    else:
+                                        cv2.line(crop_img, (0, loc_pix), (width, loc_pix), color=(0, 255, 0), thickness=2)
+                                    break
+                        if line_not_found == 1:
                             break
-
-                    if line_not_found == 1:
-                        break
         if line_not_found == 1:
             break
     if line_not_found == 0:
@@ -243,6 +249,31 @@ def find_low_border_of_roi_m2(img, roi_window, x_limit, show_border=0 ):
         print("Border is found successfully!")
 
     return crop_img
+
+
+
+# def divide_height_image(img, parts):
+#     height = img.shape[0]
+#     if height%parts == 0:
+#         dh = height / parts
+#     else:
+#         dh = height / parts
+#         last_dh = height - (dh * parts)
+
+
+
+
+    '''
+    Get image with all black pixels 
+    size is simillar as input image
+'''
+def make_image_all_black(img):
+    black_img = np.copy(img)
+    for y in range(0, black_img.shape[0]):
+        for x in range(0, black_img.shape[1]):
+            black_img[y][x] = [0, 0, 0]
+    return black_img
+
 
 def k_get(lines):
     k_tg = []
@@ -355,16 +386,57 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
     #         rb_pnt = [w, height - 1]
     #         break
 
+    next_y = 0
+    lt_found = 0
     # left top corner point
-    for top in range(0, width):
-        if img[0][top][0] > 0:
-            lt_pnt = [top - top_dx, 0]
+    for y in range(0, height):
+        next_y = 0
+        for top in range(0, width):
+            if img[y][top][0] > 0:
+                if top > 135: # think about how to figure out limits automatically
+                    next_y = 1
+                else:
+                    lt_pnt = [top - top_dx, y]
+                    lt_found = 1
+                    break
+
+            if next_y == 1 or lt_found == 1:
+                break
+        if lt_found == 1:
             break
 
+    rt_found = 0
+    check_r_line = 0
+    check_next_y = 0
     # right top corner point
-    for x in range(width - 1, 0, -1):
-        if img[0][x][0] > 0:
-            rt_pnt = [x + top_dx, 0]
+    for y in range(0, height):
+        next_y = 0
+        for x in range(width - 1, 0, -1):
+            if img[y][x][0] > 0:
+                if x < 170:
+                    next_y = 1
+                else:
+                    # for check_y in range(y, y + 10):
+                    #     check_next_y = 0
+                    #     for check_x in range(x, width):
+                    #         if img[check_y][check_x][0] > 0:
+                    #             check_r_line += 1
+                    #             check_next_y = 1
+                    #             break
+                    #         if check_next_y == 1:
+                    #             break
+                    # print 'check right line', check_r_line
+                    # if check_r_line >= 10 and check_next_y == 1:
+                    rt_pnt = [x + top_dx, 0]
+                    rt_found = 1
+                    break
+                    # else:
+                    #     rt_found = 0
+                    #     next_y = 1
+
+            if next_y == 1 or rt_found == 1:
+                break
+        if rt_found == 1:
             break
 
     if draw_pnts == 1:
@@ -372,6 +444,8 @@ def get_4_pnts_for_warping(img, top_dx = 12, draw_pnts = 0):
         cv2.circle(img, (rb_pnt[0], rb_pnt[1]), 2, (255, 0, 0), thickness=-1)
         cv2.circle(img, (lt_pnt[0], lt_pnt[1]), 2, (255, 0, 0), thickness=-1)
         cv2.circle(img, (rt_pnt[0], rt_pnt[1]), 2, (255, 0, 0), thickness=-1)
+
+    print 'lt', lt_pnt, 'rt', rt_pnt
 
     return lb_pnt, rb_pnt, lt_pnt, rt_pnt
 
